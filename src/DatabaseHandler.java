@@ -3,7 +3,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 public class DatabaseHandler {
-    Connection databaseConnection;
+    // provide the name of the db in constructor and  all the operations will be performed in that DB
+    private Connection databaseConnection;
 
     DatabaseHandler(String dataBaseName){
         try {
@@ -17,14 +18,18 @@ public class DatabaseHandler {
 
     }
 
-    public void createTable(String createTableQuery){
+    public void executeQuery(String query){
         try (Statement statement = databaseConnection.createStatement()) {
-            statement.execute(createTableQuery);
+            statement.execute(query);
             //statement.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)");
-            System.out.println("Table created successfully");
+            System.out.println("query executed successfully");
         } catch (SQLException e) {
             System.err.println("Table creation error: " + e.getMessage());
         }
 
+    }
+
+    public Connection getDatabaseConnection() {
+        return databaseConnection;
     }
 }
