@@ -2,28 +2,29 @@ import java.sql.*;
 
 public class Main {
     public static void main(String[] args) {
-//        String createTablequery = "CREATE TABLE IF NOT EXISTS inventory (" +
+//        String createTablequery1 = "CREATE TABLE IF NOT EXISTS inventory (" +
 //                "id INT PRIMARY KEY NOT NULL, " +
 //                "numberOfPages INT NOT NULL, " +
 //                "title VARCHAR(255) NOT NULL, " +
 //                "genre VARCHAR(255) NOT NULL, " +
 //                "authorName VARCHAR(255) NOT NULL, " +
-//                "costPrice FLOAT(5, 5) NOT NULL, " +
-//                "sellingPrice FLOAT(5, 5) NOT NULL, " +
+//                "costPrice FLOAT NOT NULL, " +
+//                "sellingPrice FLOAT NOT NULL, " +
 //                "description VARCHAR(255) NOT NULL, " +
 //                "coverPageIcon MEDIUMBLOB NOT NULL)";
 
         //===========================================================================
-//                String createTablequery = "CREATE TABLE IF NOT EXISTS store (" +
+//        String createTablequery2 = "CREATE TABLE IF NOT EXISTS store (" +
 //
-//                "moneySpent DOUBLE(99, 99), " +
-//                "moneyMade DOUBLE(99, 99) , " +
-//                "netIncome DOUBLE(99, 99))";
+//                "moneySpent DOUBLE PRECISION, " +
+//                "moneyMade DOUBLE PRECISION , " +
+//                "netIncome DOUBLE PRECISION)";
 
         //==============================================================================
 
 //        DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
-//        databaseHandler.runQuery(createTablequery);
+//        databaseHandler.runQuery(createTablequery1);
+//        databaseHandler.runQuery(createTablequery2);
 //        databaseHandler.runQuery("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)");
 //        databaseHandler.runQuery("SELECT * FROM users");
 //        databaseHandler.runQuery("INSERT INTO users (name, age) VALUES ('Alice', 30)");
@@ -45,8 +46,6 @@ public class Main {
         System.out.println("End");
 
     }
-
-
 
 
 }
