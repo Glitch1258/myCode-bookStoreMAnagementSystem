@@ -18,7 +18,7 @@ public class DatabaseHandler {
 
     }
 
-    public void executeQuery(String query){
+    public void runQuery(String query){
         try (Statement statement = databaseConnection.createStatement()) {
             statement.execute(query);
             //statement.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)");
