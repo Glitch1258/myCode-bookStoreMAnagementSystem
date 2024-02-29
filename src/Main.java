@@ -26,7 +26,7 @@ public class Main {
             preparedStatement.setBytes(9, imageData);
 
             preparedStatement.executeUpdate();
-            System.out.println("Image inserted successfully.");
+            System.out.println("Image inserted successfully .");
         } catch (SQLException e) {
             System.err.println("Error: " + e.getMessage());
         }
