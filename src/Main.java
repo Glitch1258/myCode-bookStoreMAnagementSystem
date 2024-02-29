@@ -15,14 +15,14 @@ public class Main {
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection databaseConnection = databaseHandler.getDatabaseConnection();
              PreparedStatement preparedStatement = databaseConnection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, 1); // Assuming 'id' is auto-incremented
-            preparedStatement.setInt(2, 300);
-            preparedStatement.setString(3, "book 1");
-            preparedStatement.setString(4, "genre book 1");
-            preparedStatement.setString(5, "author book 1");
-            preparedStatement.setDouble(6, 304.30);
-            preparedStatement.setDouble(7, 320.10);
-            preparedStatement.setString(8, "book 1 description");
+            preparedStatement.setInt(1, 5); // Assuming 'id' is auto-incremented
+            preparedStatement.setInt(2, 433);
+            preparedStatement.setString(3, "book 5");
+            preparedStatement.setString(4, "genre book 5");
+            preparedStatement.setString(5, "author book 5");
+            preparedStatement.setDouble(6, 835.50);
+            preparedStatement.setDouble(7, 885.54);
+            preparedStatement.setString(8, "book 5 description");
             preparedStatement.setBytes(9, imageData);
 
             preparedStatement.executeUpdate();
