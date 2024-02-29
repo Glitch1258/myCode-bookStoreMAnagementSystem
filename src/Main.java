@@ -4,31 +4,31 @@ import java.sql.*;
 
 public class Main {
     public static void main(String[] args)  {
-        int moneySpent=0;
-        int moneyMade=0;
-        int netIncome;
+
 
         DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
         try( Statement stmt = databaseHandler.getDatabaseConnection().createStatement()) {
 
-            ResultSet rs =  stmt.executeQuery("SELECT * FROM inventory");
+            ResultSet rs =  stmt.executeQuery("SELECT * FROM store");
 
             // Iterate through the result set
             while (rs.next()) {
-                int id = rs.getInt("id");
-                int numberOfPages = rs.getInt("numberOfPages");
-                String title = rs.getString("title");
-                String  authorName = rs.getString("authorName");
-                int costPrice = rs.getInt("costPrice");
-                int sellingPrice = rs.getInt("sellingPrice");
-                String  description = rs.getString("description");
-                System.out.println("ID: " + id + ",numberOfPages : " + numberOfPages + ", title : "+title+
-                                ", authorName : " +authorName+", costPrice : "+costPrice+", sellingPrice : "+sellingPrice+" , description"+description);
-                moneySpent+=costPrice;
+//                int id = rs.getInt("id");
+//                int numberOfPages = rs.getInt("numberOfPages");
+//                String title = rs.getString("title");
+//                String  authorName = rs.getString("authorName");
+//                int costPrice = rs.getInt("costPrice");
+//                int sellingPrice = rs.getInt("sellingPrice");
+//                String  description = rs.getString("description");
+//                System.out.println("ID: " + id + ",numberOfPages : " + numberOfPages + ", title : "+title+
+//                        ", authorName : " +authorName+", costPrice : "+costPrice+", sellingPrice : "+sellingPrice+" , description"+description);
+                System.out.println("moneySpent : "+rs.getInt("moneySpent")+
+                        ", moneyMade  "+rs.getInt("moneyMade")+
+                        ", net Income  "+rs.getInt("netIncome") );
+
             }
         } catch (SQLException e) { System.err.println("Error: " + e.getMessage());}
-        netIncome  = moneyMade - moneySpent;
-        System.out.println("money Spent "+ moneySpent+"  money made"+moneyMade+" net income" + netIncome);
+
 
 
 
