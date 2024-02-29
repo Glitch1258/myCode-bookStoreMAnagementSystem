@@ -1,32 +1,29 @@
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.*;
-
+/*ALTER TABLE your_table_name
+MODIFY COLUMN id INT AUTO_INCREMENT,
+AUTO_INCREMENT = (SELECT MAX(id) FROM your_table_name);
+*/
 public class Main {
-    public static void main(String[] args) {
-        String createTablequery1 = "CREATE TABLE IF NOT EXISTS admins (" +
-                "userName NOT NULL, " +
-                "password VARCHAR(255) NOT NULL)";
+    public static void main(String[] args) throws Exception  {
 
-        //===========================================================================
-//        String createTablequery2 = "CREATE TABLE IF NOT EXISTS store (" +
-//
-//                "moneySpent DOUBLE PRECISION, " +
-//                "moneyMade DOUBLE PRECISION , " +
-//                "netIncome DOUBLE PRECISION)";
+        File imageFile = new File("F:\\projects\\javaProject\\myCode-bookStoreMAnagementSystem\\src\\imnImg.png");
+        FileInputStream fis = new FileInputStream(imageFile);
+        byte[] imageData = new byte[(int) imageFile.length()];
 
-        //==============================================================================
+
+
+
 
        DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
-        databaseHandler.runQuery(createTablequery1);
-//        databaseHandler.runQuery(createTablequery2);
-//        databaseHandler.runQuery("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)");
-//        databaseHandler.runQuery("SELECT * FROM users");
-//        databaseHandler.runQuery("INSERT INTO users (name, age) VALUES ('Alice', 30)");
-//        databaseHandler.runQuery("INSERT INTO users (name, age) VALUES ('Mac', 20)");
-//        databaseHandler.runQuery("INSERT INTO users (name, age) VALUES ('John doe', 35)");
-//        databaseHandler.runQuery("INSERT INTO users (name, age) VALUES ('Mac Miller', 24)");
+        databaseHandler.runQuery("INSERT INTO users (id, numberOfPages , title , genre , authorName , costPrice ," +
+                " sellingPrice , description , coverPageIcon) VALUES (1, 300 , 'book 1' , 'genre book 1' ," +
+                " 'author book 1' , '304.30' , 320.10 , 'book 1 description' ,"+imageData+" )");
+
 //        try( Statement stmt = databaseHandler.getDatabaseConnection().createStatement()) {
 //
-//            ResultSet rs =  stmt.executeQuery("SELECT * FROM users");
+//            ResultSet rs =  stmt.executeQuery("SELECT * FROM inventory");
 //
 //            // Iterate through the result set
 //            while (rs.next()) {
