@@ -4,11 +4,10 @@ import java.sql.*;
 
 public class Main {
     public static void main(String[] args)  {
+        int moneySpent=0;
+        int moneyMade=0;
+        int netIncome;
 
-//        DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
-//        databaseHandler.runQuery("INSERT INTO users (id, numberOfPages , title , genre , authorName , costPrice ," +
-//                " sellingPrice , description , coverPageIcon) VALUES (1, 300 , 'book 1' , 'genre book 1' ," +
-//                " 'author book 1' , '304.30' , 320.10 , 'book 1 description' ,"+imageData+" )");
         DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
         try( Statement stmt = databaseHandler.getDatabaseConnection().createStatement()) {
 
@@ -25,8 +24,13 @@ public class Main {
                 String  description = rs.getString("description");
                 System.out.println("ID: " + id + ",numberOfPages : " + numberOfPages + ", title : "+title+
                                 ", authorName : " +authorName+", costPrice : "+costPrice+", sellingPrice : "+sellingPrice+" , description"+description);
+                moneySpent+=costPrice;
             }
         } catch (SQLException e) { System.err.println("Error: " + e.getMessage());}
+        netIncome  = moneyMade - moneySpent;
+        System.out.println("money Spent "+ moneySpent+"  money made"+moneyMade+" net income" + netIncome);
+
+
 
 
     }
