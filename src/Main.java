@@ -11,7 +11,7 @@ public class Main {
         fis.close();
 
         DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
-        String sql = "INSERT INTO users (id, numberOfPages, title, genre, authorName, costPrice, sellingPrice, description, coverPageIcon) " +
+        String sql = "INSERT INTO inventory (id, numberOfPages, title, genre, authorName, costPrice, sellingPrice, description, coverPageIcon) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection databaseConnection = databaseHandler.getDatabaseConnection();
              PreparedStatement preparedStatement = databaseConnection.prepareStatement(sql)) {
