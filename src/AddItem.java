@@ -3,10 +3,10 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class AddItem extends JFrame implements ActionListener {
-    JLabel container , heading , bookTitleLabel ,
+    JLabel container , heading , bookTitleLabel , idLabel,
             numberOfPagesLabel , bookGenreLabel , authorNameLabel ,
             costPriceLabel,sellingPriceLabel,bookDescriptionLabel;
-    JTextField bookTitleTextField,numberOfPagesTextField,
+    JTextField bookTitleTextField,numberOfPagesTextField,idTextField,
             bookGenreTextField,authorNameTextField,
             costPriceTextField,sellingPriceTextField;
     JTextArea bookDescriptionTextArea;
@@ -32,6 +32,7 @@ public class AddItem extends JFrame implements ActionListener {
         heading.setBounds(20, 20, 400, 40);
         heading.setFont(new Font("Raleway", Font.BOLD, 25));
         container.add(heading);
+
 
         bookTitleLabel = new JLabel("Book Title : ");
         bookTitleLabel.setBounds(20,50,1000,100);
@@ -81,19 +82,44 @@ public class AddItem extends JFrame implements ActionListener {
         sellingPriceTextField.setBounds(150, 335, 350, 30);
         container.add(sellingPriceTextField);
 
+
+
+        idLabel = new JLabel("ID : ");
+        idLabel.setBounds(20,350,1000,100);
+        container.add(idLabel);
+
+        idTextField = new JTextField();
+        idTextField.setBounds(150, 385, 350, 30);
+        container.add(idTextField);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         bookDescriptionLabel = new JLabel("Book Description : ");
-        bookDescriptionLabel.setBounds(20,350,1000,100);
+        bookDescriptionLabel.setBounds(20,450,1000,100);
         container.add(bookDescriptionLabel);
 
         bookDescriptionTextArea = new JTextArea();
         bookDescriptionTextArea.setLineWrap(true); // Enable word wrap
         bookDescriptionTextArea.setWrapStyleWord(true); // Wrap at word boundaries
         scrollPane = new JScrollPane(bookDescriptionTextArea);
-        scrollPane.setBounds(150, 385, 300, 100); // Adjust as needed
+        scrollPane.setBounds(150, 485, 300, 100); // Adjust as needed
         container.add(scrollPane);
 
         addToInventoryButton = new JButton("Add Item To Inventory");
-        addToInventoryButton.setBounds(150, 500, 200, 30);
+        addToInventoryButton.setBounds(150, 600, 200, 30);
         addToInventoryButton.setFocusable(false);
         addToInventoryButton.addActionListener(this);
         addToInventoryButton.setFont(new Font("Arial", Font.ITALIC, 14));
@@ -101,7 +127,7 @@ public class AddItem extends JFrame implements ActionListener {
 
         container.add(addToInventoryButton);
 
-        setSize(1120, 630);
+        setSize(1120, 700);
         setLocation(250, 100);
         setVisible(true);
     }
@@ -112,10 +138,49 @@ public class AddItem extends JFrame implements ActionListener {
             String title = bookTitleTextField.getText();
             String genre = bookGenreTextField.getText();
             String author = authorNameTextField.getText();
+            String numberOfPages = numberOfPagesTextField.getText();
+            String bookDescription = bookDescriptionTextArea.getText();
+
+
+            if(!(verityTypeISNumber(numberOfPages))){
+                System.out.println("not number block number of pages");
+                return;
+            }
+
+            String costPrice = costPriceTextField.getText();
+
+            if(!(verityTypeISNumber(costPrice))){
+                System.out.println("not number block cost price");
+                return;
+            }
+
+            String sellingPrice = sellingPriceTextField.getText();
+
+            if(!(verityTypeISNumber(sellingPrice))){
+                System.out.println("not number block cost price");
+                return;
+            }
+
+            String id = idTextField.getText();
+            if(!(id.matches("\\d*"))){
+                System.out.println("not number block ID");
+                return;
+            }
+
             System.out.println("title " + title);
+            System.out.println("number of pages " + numberOfPages);
             System.out.println("genre " + genre);
             System.out.println("author " + author);
+            System.out.println("cost price " + costPrice);
+            System.out.println("sellingPrice " + sellingPrice);
+            System.out.println("ID "+id);
+            System.out.println("description " + bookDescription);
+            System.out.println("icon   null");
         }
+    }
+
+    public boolean verityTypeISNumber(String text){
+        return text.matches("\\d*\\.?\\d*");
     }
 
     public static void main(String[] args) {
