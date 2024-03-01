@@ -85,10 +85,13 @@ public class AddItem extends JFrame implements ActionListener {
         scrollPane.setBounds(150, 385, 300, 100); // Adjust as needed
         container.add(scrollPane);
 
-        JButton addToInventoryButton = new JButton("Add Item TO Inventory");
+        JButton addToInventoryButton = new JButton("Add Item To Inventory");
         addToInventoryButton.setBounds(150, 500, 200, 30);
         addToInventoryButton.setFocusable(false);
         addToInventoryButton.addActionListener(this);
+        addToInventoryButton.setFont(new Font("Arial", Font.ITALIC, 14));
+       // addToInventoryButton.setIcon(new ImageIcon("F:\\projects\\"));
+
         container.add(addToInventoryButton);
 
         setSize(1120, 630);
@@ -97,7 +100,7 @@ public class AddItem extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent actionEvent) {
-        if (actionEvent.getActionCommand().equals("Add Item TO Inventory")) {
+        if (actionEvent.getActionCommand().equals("Add Item To Inventory")) {
             System.out.println("Button clicked!");
         }
     }
@@ -143,3 +146,42 @@ public class AddItem extends JFrame implements ActionListener {
 //        }
 //    }
 //});
+
+
+
+
+
+
+//JTextField textField = new JTextField();
+//AbstractDocument document = (AbstractDocument) textField.getDocument();
+//document.setDocumentFilter(new DocumentFilter() {
+//    @Override
+//    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+//        // Check if the input is numeric
+//        if (text.matches("\\d*")) {
+//            super.replace(fb, offset, length, text, attrs);
+//        }
+//    }
+//});
+
+
+
+
+
+
+
+
+//
+//
+//
+//JTextField textField = new JTextField();
+//textField.setInputVerifier(new InputVerifier() {
+//    @Override
+//    public boolean verify(JComponent input) {
+//        JTextField textField = (JTextField) input;
+//        String text = textField.getText();
+//        // Check if the input is numeric
+//        return text.matches("\\d*");
+//    }
+//});
+//
