@@ -29,7 +29,7 @@ public class AddItem extends JFrame implements ActionListener {
         JLabel bookTitleLabel = new JLabel("Book Title : ");
         bookTitleLabel.setBounds(20,50,1000,100);
         container.add(bookTitleLabel);
-        
+
         JTextField bookTitleTextField = new JTextField();
         bookTitleTextField.setBounds(150, 85, 350, 30);
         container.add(bookTitleTextField);
@@ -85,13 +85,21 @@ public class AddItem extends JFrame implements ActionListener {
         scrollPane.setBounds(150, 385, 300, 100); // Adjust as needed
         container.add(scrollPane);
 
+        JButton addToInventoryButton = new JButton("Add Item TO Inventory");
+        addToInventoryButton.setBounds(150, 500, 200, 30);
+        addToInventoryButton.setFocusable(false);
+        addToInventoryButton.addActionListener(this);
+        container.add(addToInventoryButton);
+
         setSize(1120, 630);
         setLocation(250, 100);
         setVisible(true);
     }
 
-    public void actionPerformed(ActionEvent ae) {
-        // Add action handling logic here
+    public void actionPerformed(ActionEvent actionEvent) {
+        if (actionEvent.getActionCommand().equals("Add Item TO Inventory")) {
+            System.out.println("Button clicked!");
+        }
     }
 
     public static void main(String[] args) {
