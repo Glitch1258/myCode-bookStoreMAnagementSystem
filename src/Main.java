@@ -9,22 +9,22 @@ public class Main {
         DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
         try( Statement stmt = databaseHandler.getDatabaseConnection().createStatement()) {
 
-            ResultSet rs =  stmt.executeQuery("SELECT * FROM store");
+            ResultSet rs =  stmt.executeQuery("SELECT * FROM inventory");
 
             // Iterate through the result set
             while (rs.next()) {
-//                int id = rs.getInt("id");
-//                int numberOfPages = rs.getInt("numberOfPages");
-//                String title = rs.getString("title");
-//                String  authorName = rs.getString("authorName");
-//                int costPrice = rs.getInt("costPrice");
-//                int sellingPrice = rs.getInt("sellingPrice");
-//                String  description = rs.getString("description");
-//                System.out.println("ID: " + id + ",numberOfPages : " + numberOfPages + ", title : "+title+
-//                        ", authorName : " +authorName+", costPrice : "+costPrice+", sellingPrice : "+sellingPrice+" , description"+description);
-                System.out.println("moneySpent : "+rs.getInt("moneySpent")+
-                        ", moneyMade  "+rs.getInt("moneyMade")+
-                        ", net Income  "+rs.getInt("netIncome") );
+                int id = rs.getInt("id");
+                int numberOfPages = rs.getInt("numberOfPages");
+                String title = rs.getString("title");
+                String  authorName = rs.getString("authorName");
+                int costPrice = rs.getInt("costPrice");
+                int sellingPrice = rs.getInt("sellingPrice");
+                String  description = rs.getString("description");
+                System.out.println("ID: " + id + ",numberOfPages : " + numberOfPages + ", title : "+title+
+                        ", authorName : " +authorName+", costPrice : "+costPrice+", sellingPrice : "+sellingPrice+" , description"+description);
+//                System.out.println("moneySpent : "+rs.getInt("moneySpent")+
+//                        ", moneyMade  "+rs.getInt("moneyMade")+
+//                        ", net Income  "+rs.getInt("netIncome") );
 
             }
         } catch (SQLException e) { System.err.println("Error: " + e.getMessage());}
