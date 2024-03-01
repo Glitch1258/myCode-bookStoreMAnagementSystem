@@ -106,3 +106,40 @@ public class AddItem extends JFrame implements ActionListener {
         new AddItem();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//JTextField costPriceTextField = new JTextField();
+//        costPriceTextField.setBounds(150, 285, 350, 30);
+//        container.add(costPriceTextField);
+//        costPriceTextField.setInputVerifier(new InputVerifier() {
+//    @Override
+//    public boolean verify(JComponent input) {
+//        JTextField tf = (JTextField) input;
+//        String text = tf.getText();
+//        try {
+//            float num = Float.parseFloat(text);
+//            // Input is a float
+//            return true;
+//        } catch (NumberFormatException e) {
+//            // Input is not a float
+//            return false;
+//        }
+//    }
+//});
