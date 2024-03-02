@@ -4,8 +4,12 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.*;
 
 public class AddItem extends JFrame implements ActionListener {
+    DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
+    Connection databaseConnection = databaseHandler.getDatabaseConnection();
+
     JLabel container, heading, bookTitleLabel, idLabel,
             numberOfPagesLabel, bookGenreLabel, authorNameLabel,
             costPriceLabel, sellingPriceLabel, bookDescriptionLabel;
@@ -174,6 +178,22 @@ public class AddItem extends JFrame implements ActionListener {
                 return;
             }
 
+            try (Statement statement = databaseConnection.createStatement()) {
+
+                ResultSet rs = statement.executeQuery("SELECT * FROM inventory where id = " + id);
+
+
+                // Iterate through the result set
+                if (rs.next()) {
+                    JOptionPane.showMessageDialog(null,
+                            "the id entered already exists, please enter a unique integer id!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+
+                }
+            } catch (SQLException e) {
+                System.err.println("Error: " + e.getMessage());
+            }
+
             System.out.println("title " + title);
             System.out.println("number of pages " + numberOfPages);
             System.out.println("genre " + genre);
@@ -182,6 +202,9 @@ public class AddItem extends JFrame implements ActionListener {
             System.out.println("sellingPrice " + sellingPrice);
             System.out.println("ID " + id);
             System.out.println("description " + bookDescription);
+
+            String insertQuery = "INSERT into inventory (id,numberOfPages,title,genre,authorName,costPrice,sellingPrice,description) values (?,?,?,?,?,?,?,?)";
+
 
         }
 
