@@ -1,24 +1,32 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
+import java.util.UUID;
 
 public class AddItem extends JFrame implements ActionListener {
     DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
     Connection databaseConnection = databaseHandler.getDatabaseConnection();
 
-    JLabel container, heading, bookTitleLabel, idLabel,
+    JLabel container, heading, bookTitleLabel, idLabel,idValueJlabel,
             numberOfPagesLabel, bookGenreLabel, authorNameLabel,
-            costPriceLabel, sellingPriceLabel, bookDescriptionLabel;
+            costPriceLabel, sellingPriceLabel, bookDescriptionLabel,bookCoverImageLabel;
     JTextField bookTitleTextField, numberOfPagesTextField, idTextField,
             bookGenreTextField, authorNameTextField,
             costPriceTextField, sellingPriceTextField;
     JTextArea bookDescriptionTextArea;
     JScrollPane scrollPane;
-    JButton addToInventoryButton;//browseButton;
+    JButton addToInventoryButton,browseButton;
+    byte[] imageData;
+    Image bookCover;
+    UUID universallyUniqueIdentifier = UUID.randomUUID();
+    String id = universallyUniqueIdentifier.toString();
+
 
     AddItem() {
         setLayout(null);
@@ -95,9 +103,9 @@ public class AddItem extends JFrame implements ActionListener {
         idLabel.setBounds(20, 350, 1000, 100);
         container.add(idLabel);
 
-        idTextField = new JTextField();
-        idTextField.setBounds(150, 385, 350, 30);
-        container.add(idTextField);
+        idValueJlabel = new JLabel(id.substring(0,8));
+        idValueJlabel.setBounds(150, 385, 350, 30);
+        container.add(idValueJlabel);
 
         bookDescriptionLabel = new JLabel("Book Description : ");
         bookDescriptionLabel.setBounds(20, 450, 1000, 100);
@@ -119,11 +127,11 @@ public class AddItem extends JFrame implements ActionListener {
         container.add(addToInventoryButton);
 
 
-//        browseButton = new JButton("Browse Image"); // Create a new button
-//        browseButton.setBounds(370, 600, 150, 30); // Adjust position and size
-//        browseButton.setFocusable(false);
-//        browseButton.addActionListener(this); // Add action listener
-//        container.add(browseButton); // Add button to the container
+        browseButton = new JButton("Browse Image"); // Create a new button
+        browseButton.setBounds(700, 600, 150, 30); // Adjust position and size
+        browseButton.setFocusable(false);
+        browseButton.addActionListener(this); // Add action listener
+        container.add(browseButton); // Add button to the container
 
 
         setSize(1120, 700);
@@ -163,12 +171,12 @@ public class AddItem extends JFrame implements ActionListener {
                 return;
             }
 
-            String id = idTextField.getText();
-            if (!(id.matches("\\d*"))) {
-                JOptionPane.showMessageDialog(null, "Enter a unique integer number value for ID!", "Error", JOptionPane.ERROR_MESSAGE);
-                System.out.println("not number block ID");
-                return;
-            }
+
+//            if (!(id.matches("\\d*"))) {
+//                JOptionPane.showMessageDialog(null, "Enter a unique integer number value for ID!", "Error", JOptionPane.ERROR_MESSAGE);
+//                System.out.println("not number block ID");
+//                return;
+//            }
 
             if ((title.isBlank() || numberOfPages.isBlank() || genre.isBlank() ||
                     author.isBlank() || costPrice.isBlank() || sellingPrice.isBlank()
@@ -209,26 +217,41 @@ public class AddItem extends JFrame implements ActionListener {
         }
 
 
-//        if (actionEvent.getSource() == browseButton) {
-//            JFileChooser fileChooser = new JFileChooser(); // Create a file chooser
-//            int result = fileChooser.showOpenDialog(this); // Show the file chooser dialog
-//
-//            if (result == JFileChooser.APPROVE_OPTION) {
-//                File selectedFile = fileChooser.getSelectedFile(); // Get the selected file
-//
-//                try {
-//                    FileInputStream fis = new FileInputStream(selectedFile); // Create FileInputStream
-//                    byte[] imageData = new byte[(int) selectedFile.length()]; // Create byte array for image data
-//                    fis.read(imageData); // Read image data into the byte array
-//                    fis.close(); // Close FileInputStream
-//
-//                    // Do something with the image data (e.g., store it in a database)
-//                    System.out.println("Image data read successfully.");
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
+        if (actionEvent.getSource() == browseButton) {
+            JFileChooser fileChooser = new JFileChooser(); // Create a file chooser
+            int result = fileChooser.showOpenDialog(this); // Show the file chooser dialog
+
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile(); // Get the selected file
+
+                try {
+                    FileInputStream fis = new FileInputStream(selectedFile); // Create FileInputStream
+                    imageData = new byte[(int) selectedFile.length()]; // Create byte array for image data
+                    fis.read(imageData); // Read image data into the byte array
+                    fis.close(); // Close FileInputStream
+                    bookCover = ImageIO.read(new ByteArrayInputStream(imageData));
+                    bookCover = bookCover.getScaledInstance(100, 200, Image.SCALE_SMOOTH);
+
+                    // If the bookCoverImageLabel already exists, update its icon
+                    if (bookCoverImageLabel != null) {
+                        bookCoverImageLabel.setIcon(new ImageIcon(bookCover));
+                    } else { // Otherwise, create a new bookCoverImageLabel and add it to the container
+                        bookCoverImageLabel = new JLabel(new ImageIcon(bookCover));
+                        bookCoverImageLabel.setBounds(725, 385, 100, 200);
+                        container.add(bookCoverImageLabel);
+                    }
+
+                    // Call revalidate and repaint to update the container
+                    container.revalidate();
+                    container.repaint();
+
+                    // Do something with the image data (e.g., store it in a database)
+                    System.out.println("Image data read successfully.");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
 
     }
