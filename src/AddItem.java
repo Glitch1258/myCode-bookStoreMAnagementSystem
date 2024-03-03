@@ -11,7 +11,8 @@ import java.util.UUID;
 
 public class AddItem extends JFrame implements ActionListener {
     DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
-    Connection databaseConnection = databaseHandler.getDatabaseConnection();
+    Connection  databaseConnection = databaseHandler.getDatabaseConnection();
+
 
     JLabel container, heading, bookTitleLabel, idLabel,idValueJlabel,
             numberOfPagesLabel, bookGenreLabel, authorNameLabel,
@@ -21,11 +22,12 @@ public class AddItem extends JFrame implements ActionListener {
             costPriceTextField, sellingPriceTextField;
     JTextArea bookDescriptionTextArea;
     JScrollPane scrollPane;
-    JButton addToInventoryButton,browseButton;
+    JButton addToInventoryButton,browseButton,goToHomePageButton;
     byte[] imageData;
     Image bookCover;
     UUID universallyUniqueIdentifier = UUID.randomUUID();
     String id = universallyUniqueIdentifier.toString();
+
 
 
     AddItem() {
@@ -99,11 +101,12 @@ public class AddItem extends JFrame implements ActionListener {
         container.add(sellingPriceTextField);
 
 
-        idLabel = new JLabel("ID : ");
+        idLabel = new JLabel("Book ID : ");
         idLabel.setBounds(20, 350, 1000, 100);
         container.add(idLabel);
+        id = id.substring(0,8);
 
-        idValueJlabel = new JLabel(id.substring(0,8));
+        idValueJlabel = new JLabel(id);
         idValueJlabel.setBounds(150, 385, 350, 30);
         container.add(idValueJlabel);
 
@@ -127,6 +130,14 @@ public class AddItem extends JFrame implements ActionListener {
         container.add(addToInventoryButton);
 
 
+
+        goToHomePageButton = new JButton("Back"); // Create a new button
+        goToHomePageButton.setBounds(360, 600, 100, 30); // Adjust position and size
+        goToHomePageButton.setFocusable(false);
+        goToHomePageButton.addActionListener(this); // Add action listener
+        container.add(goToHomePageButton); // Add button to the container
+
+
         browseButton = new JButton("Browse Image"); // Create a new button
         browseButton.setBounds(700, 600, 150, 30); // Adjust position and size
         browseButton.setFocusable(false);
@@ -137,6 +148,7 @@ public class AddItem extends JFrame implements ActionListener {
         setSize(1120, 700);
         setLocation(250, 100);
         setVisible(true);
+        setResizable(false);
     }
 
     public void actionPerformed(ActionEvent actionEvent) {
@@ -186,17 +198,15 @@ public class AddItem extends JFrame implements ActionListener {
                 return;
             }
 
-            try (Statement statement = databaseConnection.createStatement()) {
-
-                ResultSet rs = statement.executeQuery("SELECT * FROM inventory where id = " + id);
-
+            try (PreparedStatement statement = databaseConnection.prepareStatement("SELECT * FROM inventory WHERE id = ?")) {
+                statement.setString(1, id); // Set the value of the parameter
+                ResultSet rs = statement.executeQuery();
 
                 // Iterate through the result set
                 if (rs.next()) {
                     JOptionPane.showMessageDialog(null,
-                            "the id entered already exists, please enter a unique integer id!", "Error", JOptionPane.ERROR_MESSAGE);
+                            "The entered ID already exists. Please enter a unique ID.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
-
                 }
             } catch (SQLException e) {
                 System.err.println("Error: " + e.getMessage());
@@ -210,8 +220,36 @@ public class AddItem extends JFrame implements ActionListener {
             System.out.println("sellingPrice " + sellingPrice);
             System.out.println("ID " + id);
             System.out.println("description " + bookDescription);
+            System.out.println("imageLength " + imageData.length);
 
-            String insertQuery = "INSERT into inventory (id,numberOfPages,title,genre,authorName,costPrice,sellingPrice,description) values (?,?,?,?,?,?,?,?)";
+
+            String insertQuery =  "INSERT into inventory (id, numberOfPages, title, genre, authorName, costPrice, sellingPrice, description,coverPageIcon)" +
+                    " values (?, ?, ?, ?, ?, ?, ?, ?,?)";
+
+//            if (imageData == null) {
+//                JOptionPane.showMessageDialog(null, "Please select an image.", "Error", JOptionPane.ERROR_MESSAGE);
+//                return;
+//            }
+            try (Connection databaseConnection = databaseHandler.getDatabaseConnection();
+                 PreparedStatement preparedStatement = databaseConnection.prepareStatement(insertQuery)) {
+                preparedStatement.setString(1, id); // Assuming 'id' is auto-incremented
+                preparedStatement.setInt(2, Integer.parseInt(numberOfPages));
+                preparedStatement.setString(3, title);
+                preparedStatement.setString(4, genre);
+                preparedStatement.setString(5, author);
+                preparedStatement.setDouble(6, Float.parseFloat(costPrice));
+                preparedStatement.setDouble(7,Float.parseFloat(sellingPrice));
+                preparedStatement.setString(8, bookDescription);
+                preparedStatement.setBytes(9, imageData);
+
+                preparedStatement.executeUpdate();
+                System.out.println("data inserted from GUI .");
+            } catch (SQLException e) {
+                System.err.println("Error: " + e.getMessage());
+            }finally {
+                dispose();
+                new AddItem();
+            }
 
 
         }

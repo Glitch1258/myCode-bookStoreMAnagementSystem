@@ -10,13 +10,14 @@ public class Main {
             ResultSet rs = stmt.executeQuery("SELECT * FROM inventory");
 
             while (rs.next()) {
-                int id = rs.getInt("id");
+                String id = rs.getString("id");
                 int numberOfPages = rs.getInt("numberOfPages");
                 String title = rs.getString("title");
                 String authorName = rs.getString("authorName");
                 int costPrice = rs.getInt("costPrice");
                 int sellingPrice = rs.getInt("sellingPrice");
                 String description = rs.getString("description");
+                String genre = rs.getString("genre");
 
                 // Reading BLOB data from the coverPageIcon column
                 byte[] coverPageIconBytes = rs.getBytes("coverPageIcon");
@@ -24,7 +25,7 @@ public class Main {
                 System.out.println("ID: " + id + ", NumberOfPages: " + numberOfPages +
                         ", Title: " + title + ", AuthorName: " + authorName +
                         ", CostPrice: " + costPrice + ", SellingPrice: " + sellingPrice +
-                        ", Description: " + description + ", CoverPageIcon size: " + coverPageIconBytes.length);
+                        ", Description: " + description + ", CoverPageIcon size: " + coverPageIconBytes.length+" genre"+genre);
             }
 
         } catch (SQLException e) {
