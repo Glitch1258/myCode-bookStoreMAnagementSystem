@@ -5,17 +5,9 @@ public class Main {
         DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
 
         Connection connection = databaseHandler.getDatabaseConnection();
-        String query = "INSERT INTO admins (userName,password) values (?,?)";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, "sakib2");
-            preparedStatement.setString(2, "123456");
-            preparedStatement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
 
 
+//==========================================================
 
     }
 }

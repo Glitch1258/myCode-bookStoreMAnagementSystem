@@ -6,7 +6,6 @@ import java.sql.*;
 
 public class LoginPage extends JFrame implements ActionListener {
     DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
-    Connection databaseConnection = databaseHandler.getDatabaseConnection();
 
 
     JLabel container, heading, userNameLabel, passwordLabel;
@@ -73,10 +72,30 @@ public class LoginPage extends JFrame implements ActionListener {
         if (actionEvent.getSource() == logInButton) {
             String userName = userNameTextField.getText();
             String passWord = passwordTextField.getText();
-            if(userName.isBlank()||passWord.isBlank()){
+            if (userName.isBlank() || passWord.isBlank()) {
                 JOptionPane.showMessageDialog(null, "One or both of the input fields is blank!", "Error", JOptionPane.ERROR_MESSAGE);
             }
-            
+            try (Connection connection = databaseHandler.getDatabaseConnection();
+                 Statement statement = connection.createStatement();) {
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM admins WHERE userName='" + userName + "' AND password = '" + passWord + "'");
+                while (resultSet.next()) {
+                    System.out.println("login successful");
+                    dispose();
+                    //new HomePage(); //not yet created
+                    return;
+
+                }
+                JOptionPane.showMessageDialog(null, "Login failed!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                dispose();
+                new LoginPage();
+
+            } catch (SQLException exception) {
+                System.out.print("Could not log in: ");
+                exception.printStackTrace();
+
+            }
+
 
         }
 
