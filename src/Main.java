@@ -56,3 +56,25 @@ public class Main {
 //                                 "name TEXT NOT NULL," +
 //                                 "password TEXT NOT NULL" +
 //                                 ")");
+
+
+
+//
+//
+//
+//String tableName = "admins"; // Specify the name of the table you want to inspect
+//DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
+//
+//        try (Connection connection = databaseHandler.getDatabaseConnection();
+//Statement statement = connection.createStatement()) {
+//
+//ResultSet resultSet = statement.executeQuery("PRAGMA table_info(" + tableName + ")");
+//
+//// Iterate over the result set to retrieve column names
+//            while (resultSet.next()) {
+//String columnName = resultSet.getString("name");
+//                System.out.println("Column Name: " + columnName);
+//            }
+//                    } catch (SQLException e) {
+//        System.err.println("Error: " + e.getMessage());
+//        }
