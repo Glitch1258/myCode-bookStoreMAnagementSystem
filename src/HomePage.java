@@ -2,17 +2,33 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class HomePage extends JFrame implements ActionListener {
     String QUERY;
+    DatabaseHandler databaseHandler;
     JComboBox<String> sortByOptionsComboBox;
     JTextArea searchBarTextArea;
     JTextField sellByIdTextField;
     JButton sortButton, searchButton , sellButton , addToInventoryButton;
-    String []sortByOptionsComboBoxOptionsArray = {"id","numberOfPages","title","genre","authorName","costPrice","sellingPrice","description","coverPageIcon"};
+    String []sortByOptionsComboBoxOptionsArray = {"id","numberOfPages","title","genre","authorName","costPrice",
+            "sellingPrice","description","coverPageIcon"};
     JLabel moneySpentLabel,moneyEarnedLabel,netIncomeLabel,sortByComboBoxLabel, searchBarTextAreaLabel , sellByIdLabel;
-    int  moneySpentValue,moneyEarnedValue,netIncomeValue;
+    double  moneySpentValue,moneyEarnedValue;
     public HomePage(String query) {
+        //=======================================
+        this.databaseHandler = new DatabaseHandler("bookStore");
+
+
+
+
+
+
+        //========================================
+        this.databaseHandler = new DatabaseHandler("bookStore");
         this.QUERY = query;
         setTitle("Home Page");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -159,13 +175,14 @@ public class HomePage extends JFrame implements ActionListener {
 
     // Method to generate random background color
     private Color getRandomColor() {
-        int r = (int) (Math.random() * 256);
-        int g = (int) (Math.random() * 256);
-        int b = (int) (Math.random() * 256);
+        //208, 211, 212 control Pane color
+        int r = (int) (Math.random() * 256);//174, 214, 241
+        int g = (int) (Math.random() * 256);//213, 219, 219
+        int b = (int) (Math.random() * 256);//250, 215, 160
         return new Color(r, g, b);
     }
     public void actionPerformed(ActionEvent actionEvent){
-        System.out.println("sssss");
+        System.out.println("actionPerformed");
 
     }
 

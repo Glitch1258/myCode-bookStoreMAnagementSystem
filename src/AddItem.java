@@ -11,23 +11,22 @@ import java.util.UUID;
 
 public class AddItem extends JFrame implements ActionListener {
     DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
-    Connection  databaseConnection = databaseHandler.getDatabaseConnection();
+    Connection databaseConnection = databaseHandler.getDatabaseConnection();
 
 
-    JLabel container, heading, bookTitleLabel, idLabel,idValueJlabel,
+    JLabel container, heading, bookTitleLabel, idLabel, idValueJlabel,
             numberOfPagesLabel, bookGenreLabel, authorNameLabel,
-            costPriceLabel, sellingPriceLabel, bookDescriptionLabel,bookCoverImageLabel;
+            costPriceLabel, sellingPriceLabel, bookDescriptionLabel, bookCoverImageLabel;
     JTextField bookTitleTextField, numberOfPagesTextField, idTextField,
             bookGenreTextField, authorNameTextField,
             costPriceTextField, sellingPriceTextField;
     JTextArea bookDescriptionTextArea;
     JScrollPane scrollPane;
-    JButton addToInventoryButton,browseButton,goToHomePageButton;
+    JButton addToInventoryButton, browseButton, goToHomePageButton;
     byte[] imageData;
     Image bookCover;
     UUID universallyUniqueIdentifier = UUID.randomUUID();
     String id = universallyUniqueIdentifier.toString();
-
 
 
     AddItem() {
@@ -106,7 +105,7 @@ public class AddItem extends JFrame implements ActionListener {
         idLabel = new JLabel("Book ID : ");
         idLabel.setBounds(20, 350, 1000, 100);
         container.add(idLabel);
-        id = id.substring(0,8);
+        id = id.substring(0, 8);
 
         idValueJlabel = new JLabel(id);
         idValueJlabel.setBounds(150, 385, 350, 30);
@@ -130,7 +129,6 @@ public class AddItem extends JFrame implements ActionListener {
         addToInventoryButton.setFont(new Font("Arial", Font.ITALIC, 14));
         // addToInventoryButton.setIcon(new ImageIcon("F:\\projects\\"));
         container.add(addToInventoryButton);
-
 
 
         goToHomePageButton = new JButton("Back"); // Create a new button
@@ -164,7 +162,8 @@ public class AddItem extends JFrame implements ActionListener {
 
 
             if (!(verityTypeISNumber(numberOfPages))) {
-                JOptionPane.showMessageDialog(null, "Enter a number value for number of pages!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Enter a number value for number of pages!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
                 System.out.println("not number block number of pages");
                 return;
             }
@@ -172,7 +171,8 @@ public class AddItem extends JFrame implements ActionListener {
             String costPrice = costPriceTextField.getText();
 
             if (!(verityTypeISNumber(costPrice))) {
-                JOptionPane.showMessageDialog(null, "Enter a number value for cost price!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Enter a number value for cost price!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
                 System.out.println("not number block cost price");
                 return;
             }
@@ -180,14 +180,16 @@ public class AddItem extends JFrame implements ActionListener {
             String sellingPrice = sellingPriceTextField.getText();
 
             if (!(verityTypeISNumber(sellingPrice))) {
-                JOptionPane.showMessageDialog(null, "Enter a number value for selling price!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Enter a number value for selling price!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
                 System.out.println("not number block cost price");
                 return;
             }
 
 
 //            if (!(id.matches("\\d*"))) {
-//                JOptionPane.showMessageDialog(null, "Enter a unique integer number value for ID!", "Error", JOptionPane.ERROR_MESSAGE);
+//                JOptionPane.showMessageDialog(null, "Enter a unique integer number value for ID!", "Error",
+//                JOptionPane.ERROR_MESSAGE);
 //                System.out.println("not number block ID");
 //                return;
 //            }
@@ -196,7 +198,8 @@ public class AddItem extends JFrame implements ActionListener {
                     author.isBlank() || costPrice.isBlank() || sellingPrice.isBlank()
                     || id.isBlank() || bookDescription.isBlank())) {
                 JOptionPane.showMessageDialog(null,
-                        "Please make sure none of the input fields is empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                        "Please make sure none of the input fields is empty!", "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -207,7 +210,8 @@ public class AddItem extends JFrame implements ActionListener {
                 // Iterate through the result set
                 if (rs.next()) {
                     JOptionPane.showMessageDialog(null,
-                            "The entered ID already exists. Please enter a unique ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                            "The entered ID already exists. Please enter a unique ID.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             } catch (SQLException e) {
@@ -225,7 +229,8 @@ public class AddItem extends JFrame implements ActionListener {
             System.out.println("imageLength " + imageData.length);
 
 
-            String insertQuery =  "INSERT into inventory (id, numberOfPages, title, genre, authorName, costPrice, sellingPrice, description,coverPageIcon)" +
+            String insertQuery = "INSERT into inventory (id, numberOfPages, title, genre, authorName, costPrice," +
+                    " sellingPrice, description,coverPageIcon)" +
                     " values (?, ?, ?, ?, ?, ?, ?, ?,?)";
 
 //            if (imageData == null) {
@@ -240,7 +245,7 @@ public class AddItem extends JFrame implements ActionListener {
                 preparedStatement.setString(4, genre);
                 preparedStatement.setString(5, author);
                 preparedStatement.setDouble(6, Float.parseFloat(costPrice));
-                preparedStatement.setDouble(7,Float.parseFloat(sellingPrice));
+                preparedStatement.setDouble(7, Float.parseFloat(sellingPrice));
                 preparedStatement.setString(8, bookDescription);
                 preparedStatement.setBytes(9, imageData);
 
@@ -248,7 +253,7 @@ public class AddItem extends JFrame implements ActionListener {
                 System.out.println("data inserted from GUI .");
             } catch (SQLException e) {
                 System.err.println("Error: " + e.getMessage());
-            }finally {
+            } finally {
                 dispose();
                 new AddItem();
             }

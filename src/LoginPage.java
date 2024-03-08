@@ -74,11 +74,13 @@ public class LoginPage extends JFrame implements ActionListener {
             String userName = userNameTextField.getText();
             String passWord = passwordTextField.getText();
             if (userName.isBlank() || passWord.isBlank()) {
-                JOptionPane.showMessageDialog(null, "One or both of the input fields is blank!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "One or both of the input fields is blank!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
             try (Connection connection = databaseHandler.getDatabaseConnection();
                  Statement statement = connection.createStatement();) {
-                ResultSet resultSet = statement.executeQuery("SELECT * FROM admins WHERE userName='" + userName + "' AND password = '" + passWord + "'");
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM admins WHERE userName='" + userName +
+                        "' AND password = '" + passWord + "'");
                 while (resultSet.next()) {
                     System.out.println("login successful");
                     dispose();
