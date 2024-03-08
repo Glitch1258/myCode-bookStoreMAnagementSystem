@@ -32,6 +32,8 @@ public class AddItem extends JFrame implements ActionListener {
 
     AddItem() {
         setLayout(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 
         container = new JLabel() {
             // Override paintComponent to set background color
@@ -299,7 +301,7 @@ public class AddItem extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        new AddItem();
+        SwingUtilities.invokeLater(AddItem::new);
     }
 }
 

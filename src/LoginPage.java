@@ -16,6 +16,7 @@ public class LoginPage extends JFrame implements ActionListener {
 
     LoginPage() {
         setLayout(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         container = new JLabel() {
             // Override paintComponent to set background color
@@ -104,7 +105,7 @@ public class LoginPage extends JFrame implements ActionListener {
 
 
     public static void main(String[] args) {
-        new LoginPage();
+        SwingUtilities.invokeLater(LoginPage::new);
     }
 }
 
