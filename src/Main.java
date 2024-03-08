@@ -33,7 +33,7 @@ public class Main {
              PreparedStatement preparedStatement = conn.prepareStatement(insertQuery)
              ) {
 
-            ResultSet rs = stmt.executeQuery("SELECT * FROM store");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM inventory");
 
             while (rs.next()) {
                 String id = rs.getString("id");
