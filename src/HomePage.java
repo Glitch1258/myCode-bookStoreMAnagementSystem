@@ -1,15 +1,18 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.*;
 
 public class HomePage extends JFrame implements ActionListener {
+    int colourState = 0;
     String QUERY;
     DatabaseHandler databaseHandler;
+    Connection databaseConnection;
     JComboBox<String> sortByOptionsComboBox;
     JTextArea searchBarTextArea;
     JTextField sellByIdTextField;
@@ -21,6 +24,25 @@ public class HomePage extends JFrame implements ActionListener {
     public HomePage(String query) {
         //=======================================
         this.databaseHandler = new DatabaseHandler("bookStore");
+        this.databaseConnection = databaseHandler.getDatabaseConnection();
+        try(Statement statement = databaseConnection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM store");
+            while (resultSet.next()){
+//                System.out.print("Money spent : ");
+//                System.out.print(resultSet.getDouble("moneySpent"));
+//                System.out.print("\nMoney made : ");
+//                System.out.print(resultSet.getDouble("moneyMade"));
+//                System.out.print("\nNet Income : ");
+//                System.out.print(resultSet.getDouble("netIncome"));
+                this.moneySpentValue  = resultSet.getDouble("moneySpent");
+                this.moneyEarnedValue = resultSet.getDouble("moneyMade");
+
+            }
+
+        }catch (SQLException sqlException){
+            System.out.println("Exception in accessing store data "+  sqlException.getMessage());
+
+        }
 
 
 
@@ -37,23 +59,109 @@ public class HomePage extends JFrame implements ActionListener {
         // Create parent panel
         JPanel parentPanel = new JPanel();
         parentPanel.setLayout(new BoxLayout(parentPanel, BoxLayout.Y_AXIS)); // Use BoxLayout with Y_AXIS
+        //--------------------------------------------------------------------------------------------------------------
 
-        // Add child panels to the parent panel
-        for (int i = 0; i < 100; i++) {
-            JPanel childPanel = new JPanel();
-            childPanel.setLayout(new GridLayout(10, 1)); // Use GridLayout for 5 labels in each child panel
-            //childPanel.setPreferredSize(new Dimension(200, 100));
-            childPanel.setBackground(getRandomColor()); // Vary background color
+        try (Statement stmt =databaseConnection.createStatement()) {
 
-            // Add labels to the child panel
-            for (int j = 0; j < 10; j++) {
-                JLabel label = new JLabel("Label " + (j + 1));
-                childPanel.add(label);
+            ResultSet rs = stmt.executeQuery(QUERY);
+
+            while (rs.next()) {
+                String id = rs.getString("id");
+                int numberOfPages = rs.getInt("numberOfPages");
+                String title = rs.getString("title");
+                String authorName = rs.getString("authorName");
+                float costPrice = rs.getFloat("costPrice");
+                float sellingPrice = rs.getFloat("sellingPrice");
+                String description = rs.getString("description");
+                String genre = rs.getString("genre");
+
+
+                // Reading BLOB data from the coverPageIcon column
+                byte[] coverPageIconBytes = rs.getBytes("coverPageIcon");
+
+                System.out.println("ID: " + id + "\n NumberOfPages: " + numberOfPages +
+                        "\n Title: " + title + "\n AuthorName: " + authorName +
+                        "\n CostPrice: " + costPrice + "\n SellingPrice: " + sellingPrice +
+                        "\n Description: " + description + "\n CoverPageIcon size: " + coverPageIconBytes.length+
+                        "\n genre"+genre+"\n length of blob : "+coverPageIconBytes.length );
+                System.out.println("---------------------------------------------------------------------------------");
+                JPanel childPanel = new JPanel();
+                childPanel.setLayout(new GridLayout(9, 1));
+                childPanel.setBackground(getRandomColor());
+                System.out.println(this.colourState);
+                //"Click To Copy Book ID To Sell By ID Bar : "+id
+                JButton copyIdButton = new JButton("Copy To Sell ID : "+id);
+                copyIdButton.setFocusable(false);
+                copyIdButton.setFont(new Font("Times New Roman", Font.BOLD, 15));
+                copyIdButton.setBackground(Color.white);
+               // copyIdButton.setEditable(false);
+
+                copyIdButton.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        super.mouseClicked(e);
+                        // Copy the text to the system clipboard
+
+                       // StringSelection selection = new StringSelection();
+                        sellByIdTextField.setText(id);
+                    }
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        // Change button color on hover
+                        copyIdButton.setBackground(new Color(255, 255, 255));
+
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        // Restore button color when mouse exits
+                        copyIdButton.setBackground(new Color(232, 217, 201));
+
+                    }
+                });
+                copyIdButton.setBorder(BorderFactory.createRaisedBevelBorder());
+                copyIdButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                copyIdButton.setBackground(new Color(232, 217, 201));
+                copyIdButton.setForeground(Color.BLACK); // White text color
+                copyIdButton.setFocusPainted(false); // Remove focus border
+                childPanel.add(copyIdButton);
+                childPanel.add(new JLabel("<html>Title : "+title+" </html>"));
+                childPanel.add(new JLabel("<html>Book ID : "+id+" </html>"));
+                childPanel.add(new JLabel("<html>number Of pages : "+numberOfPages+" </html>"));
+                childPanel.add(new JLabel("<html>Author's Name : "+authorName+" </html>"));
+                childPanel.add(new JLabel("<html>Cost Price : "+costPrice+" </html>"));
+                childPanel.add(new JLabel("<html>Selling Price : "+sellingPrice+" </html>"));
+                childPanel.add(new JLabel("<html>Book Description : "+description+" </html>"));
+                childPanel.add(new JLabel("<html>Book Genre : "+genre+" </html>"));
+                parentPanel.add(childPanel);
+
             }
 
-            parentPanel.add(childPanel);
+
+
+
+        } catch (SQLException e) {
+            System.err.println("Error: " + e.getMessage());
         }
 
+
+        //--------------------------------------------------------------------------------------------------------------
+        // Add child panels to the parent panel
+//        for (int i = 0; i < 100; i++) {
+//            JPanel childPanel = new JPanel();
+//            childPanel.setLayout(new GridLayout(10, 1)); // Use GridLayout for 5 labels in each child panel
+//            //childPanel.setPreferredSize(new Dimension(200, 100));
+//            childPanel.setBackground(getRandomColor()); // Vary background color
+//
+//            // Add labels to the child panel
+//            for (int j = 0; j < 10; j++) {
+//                JLabel label = new JLabel("Label " + (j + 1));
+//                childPanel.add(label);
+//            }
+//
+//            parentPanel.add(childPanel);
+//        }
+        //--------------------------------------------------------------------------------------------------------------
         // Create JScrollPane and add the parent panel to it
         JScrollPane scrollPane = new JScrollPane(parentPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -64,7 +172,7 @@ public class HomePage extends JFrame implements ActionListener {
 
         // Create a JPanel to add to the left of the JScrollPane
         JPanel controlMenu = new JPanel();
-        controlMenu.setBackground(Color.RED); // Just to visualize it better
+        controlMenu.setBackground(new Color(193, 215,215)); // Just to visualize it better
         controlMenu.setPreferredSize(new Dimension(400, 800)); // Set size of the left panel
 
         //--------------------------------------------------------------------------------------------------
@@ -74,9 +182,9 @@ public class HomePage extends JFrame implements ActionListener {
         moneySpentLabel = new JLabel("Money Spent : "+moneySpentValue);
         netIncomeLabel = new JLabel("Net Income : "+(moneyEarnedValue-moneySpentValue));
 
-        moneySpentLabel.setBounds(0,0,100,25);
-        moneyEarnedLabel.setBounds(0,25,100,25);
-        netIncomeLabel.setBounds(0,50,100,25);
+        moneySpentLabel.setBounds(0,0,400,25);
+        moneyEarnedLabel.setBounds(0,25,400,25);
+        netIncomeLabel.setBounds(0,50,400,25);
 
         //-----------------------------------------------------------------------------------------
 
@@ -85,10 +193,10 @@ public class HomePage extends JFrame implements ActionListener {
 
         sortByComboBoxLabel = new JLabel("sort by :");
         sortByComboBoxLabel.setBounds(0,75,100,25);
-        sortByOptionsComboBox.setBounds(50,75,100,25);
+        sortByOptionsComboBox.setBounds(50,75,150,25);
 
         sortButton = new JButton("sort");
-        sortButton.setBounds(150,75,100,25);
+        sortButton.setBounds(205,75,100,25);
         sortButton.setFocusable(false);
         sortButton.addActionListener(this);
 
@@ -175,11 +283,22 @@ public class HomePage extends JFrame implements ActionListener {
 
     // Method to generate random background color
     private Color getRandomColor() {
-        //208, 211, 212 control Pane color
-        int r = (int) (Math.random() * 256);//174, 214, 241
-        int g = (int) (Math.random() * 256);//213, 219, 219
-        int b = (int) (Math.random() * 256);//250, 215, 160
-        return new Color(r, g, b);
+        this.colourState%=3;
+        if(this.colourState==0){
+            this.colourState++;
+            return new Color(135, 245,228);
+
+
+        }
+        if(this.colourState==1){
+            this.colourState++;
+            return new Color(102, 255,255);
+        }
+        if(this.colourState==2){
+            this.colourState++;
+            return new Color(204, 255,255);
+        }
+        return new Color(193, 215,215);
     }
     public void actionPerformed(ActionEvent actionEvent){
         System.out.println("actionPerformed");
@@ -187,6 +306,6 @@ public class HomePage extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new HomePage("query"));
+        SwingUtilities.invokeLater(() -> new HomePage("SELECT * FROM inventory"));
     }
 }
