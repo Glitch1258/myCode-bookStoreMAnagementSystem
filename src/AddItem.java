@@ -298,6 +298,11 @@ public class AddItem extends JFrame implements ActionListener {
             }
         }
 
+        if(actionEvent.getSource()==goToHomePageButton){
+            dispose();
+            SwingUtilities.invokeLater(() -> new HomePage("SELECT * FROM inventory"));
+        }
+
 
     }
 

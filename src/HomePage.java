@@ -17,8 +17,8 @@ public class HomePage extends JFrame implements ActionListener {
     JTextArea searchBarTextArea;
     JTextField sellByIdTextField;
     JButton sortButton, searchButton, sellButton, addToInventoryButton;
-    String[] sortByOptionsComboBoxOptionsArray = {"id", "numberOfPages", "title", "genre", "authorName", "costPrice",
-            "sellingPrice", "description", "coverPageIcon"};
+    String[] sortByOptionsComboBoxOptionsArray = {"numberOfPages", "title", "genre", "authorName", "costPrice",
+            "sellingPrice"};
     JLabel moneySpentLabel, moneyEarnedLabel, netIncomeLabel, sortByComboBoxLabel, searchBarTextAreaLabel, sellByIdLabel;
     double moneySpentValue, moneyEarnedValue;
 
@@ -249,9 +249,9 @@ public class HomePage extends JFrame implements ActionListener {
         searchButton = new JButton("search");
 
 
-        searchBarTextAreaLabel.setBounds(150, 125, 100, 25);
-        searchBarTextArea.setBounds(0, 175, 400, 50);
-        searchButton.setBounds(150, 230, 100, 25);
+        searchBarTextAreaLabel.setBounds(170, 150, 100, 25);
+        searchBarTextArea.setBounds(50, 175, 300, 40);
+        searchButton.setBounds(150, 225, 100, 25);
 
 
         searchBarTextAreaLabel.setFont(new Font("Arial", Font.ITALIC, 20));
@@ -329,7 +329,36 @@ public class HomePage extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent actionEvent) {
-        System.out.println("actionPerformed");
+        if(actionEvent.getSource()==addToInventoryButton){
+            dispose();
+            SwingUtilities.invokeLater(AddItem::new);
+        }
+        if(actionEvent.getSource()==sortButton){
+            String sortBy = (String) sortByOptionsComboBox.getSelectedItem();
+            dispose();
+            SwingUtilities.invokeLater(() -> new HomePage("SELECT * FROM inventory ORDER BY " + sortBy + " ASC"));
+
+        }
+        if(actionEvent.getSource()==sellButton){
+            float costPrice;
+            float sellingPrice;
+            float profit;
+            try(Statement statement = this.databaseConnection.createStatement()){
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM inventory WHERE id='"+sellByIdTextField.getText()+"'");
+                while (resultSet.next()) {
+                    costPrice = resultSet.getFloat("costPrice");
+                    sellingPrice = resultSet.getFloat("sellingPrice");
+                    profit = (sellingPrice - costPrice);
+                    System.out.println(sellingPrice - costPrice);
+                }
+                // update store table hear.
+
+
+            }catch (SQLException sqlException){
+                System.err.println("Error: " + sqlException.getMessage());
+            }
+        }
+
 
     }
 
