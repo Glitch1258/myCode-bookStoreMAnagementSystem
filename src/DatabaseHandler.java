@@ -5,10 +5,10 @@ public class DatabaseHandler {
     private Connection databaseConnection;
 
 
-    DatabaseHandler(String dataBaseName){
+    DatabaseHandler(String dataBaseName) {
         try {
             Class.forName("org.sqlite.JDBC");
-            this.databaseConnection = DriverManager.getConnection("jdbc:sqlite:"+dataBaseName+".db");
+            this.databaseConnection = DriverManager.getConnection("jdbc:sqlite:" + dataBaseName + ".db");
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Error: " + e.getMessage());
         }
@@ -17,7 +17,7 @@ public class DatabaseHandler {
 
     }
 
-    public void runQuery(String query){
+    public void runQuery(String query) {
         try (Statement statement = databaseConnection.createStatement()) {
             statement.execute(query);
             //statement.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)");
@@ -29,15 +29,10 @@ public class DatabaseHandler {
     }
 
 
-
     public Connection getDatabaseConnection() {
         return databaseConnection;
     }
 }
-
-
-
-
 
 
 //

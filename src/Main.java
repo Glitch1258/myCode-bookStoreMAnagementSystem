@@ -1,9 +1,10 @@
+import javax.swing.*;
 import java.sql.*;
 
 public class Main {
     public static void main(String[] args) {
-        DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
-
+        SwingUtilities.invokeLater(LoginPage::new);
+       // DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
 
 
 //        String tableName = "store"; // Specify the name of the table you want to inspect
@@ -72,7 +73,6 @@ public class Main {
 //
 
 
-
 //        String insertQuery = "INSERT into store (moneySpent, moneyMade, netIncome) values (?, ?, ?)";
 //
 //
@@ -89,13 +89,6 @@ public class Main {
 //        } catch (SQLException e) {
 //            System.err.println("Error: " + e.getMessage());
 //        }
-
-
-
-
-
-
-
 
 
 //==========================================================
@@ -132,14 +125,11 @@ public class Main {
 //        }
 
 
-
-
 //
 //databaseHandler.runQuery("CREATE TABLE IF NOT EXISTS admins (" +
 //                                 "name TEXT NOT NULL," +
 //                                 "password TEXT NOT NULL" +
 //                                 ")");
-
 
 
 //

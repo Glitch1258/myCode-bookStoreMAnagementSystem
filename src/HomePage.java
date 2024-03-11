@@ -16,9 +16,8 @@ public class HomePage extends JFrame implements ActionListener {
     JComboBox<String> sortByOptionsComboBox;
     JTextArea searchBarTextArea;
     JTextField sellByIdTextField;
-    JButton sortButton, searchButton, sellButton, addToInventoryButton;
-    String[] sortByOptionsComboBoxOptionsArray = {"numberOfPages", "title", "genre", "authorName", "costPrice",
-            "sellingPrice", "id"};
+    JButton sortButton, searchButton, sellButton, addToInventoryButton,logOutButton;
+    String[] sortByOptionsComboBoxOptionsArray = {"numberOfPages", "title", "genre", "authorName", "costPrice", "sellingPrice", "id"};
     JLabel moneySpentLabel, moneyEarnedLabel, netIncomeLabel, sortByComboBoxLabel, searchBarTextAreaLabel, sellByIdLabel;
     double moneySpentValue, moneyEarnedValue;
 
@@ -43,6 +42,7 @@ public class HomePage extends JFrame implements ActionListener {
 
         } catch (SQLException sqlException) {
             System.out.println("Exception in accessing store data " + sqlException.getMessage());
+
 
         }
 
@@ -77,11 +77,7 @@ public class HomePage extends JFrame implements ActionListener {
                 // Reading BLOB data from the coverPageIcon column
                 byte[] coverPageIconBytes = rs.getBytes("coverPageIcon");
 
-                System.out.println("ID: " + id + "\n NumberOfPages: " + numberOfPages +
-                        "\n Title: " + title + "\n AuthorName: " + authorName +
-                        "\n CostPrice: " + costPrice + "\n SellingPrice: " + sellingPrice +
-                        "\n Description: " + description + "\n CoverPageIcon size: " + coverPageIconBytes.length +
-                        "\n genre" + genre + "\n length of blob : " + coverPageIconBytes.length);
+                System.out.println("ID: " + id + "\n NumberOfPages: " + numberOfPages + "\n Title: " + title + "\n AuthorName: " + authorName + "\n CostPrice: " + costPrice + "\n SellingPrice: " + sellingPrice + "\n Description: " + description + "\n CoverPageIcon size: " + coverPageIconBytes.length + "\n genre" + genre + "\n length of blob : " + coverPageIconBytes.length);
                 System.out.println("---------------------------------------------------------------------------------");
                 JPanel childPanel = new JPanel();
                 childPanel.setLayout(new BoxLayout(childPanel, BoxLayout.Y_AXIS));
@@ -299,6 +295,16 @@ public class HomePage extends JFrame implements ActionListener {
         //---------------------------------------------------------------------------------------------
 
 
+        logOutButton = new JButton("Log out");
+        logOutButton.setBounds(0, 355, 200, 25);
+        logOutButton.addActionListener(this);
+        logOutButton.setFocusable(false);
+        controlMenu.add(logOutButton);
+
+
+        ///----------------------------------------------------------------------------------------
+
+
         // Create a BorderLayout for the JFrame
         setLayout(new BorderLayout());//<--NULL layout
 
@@ -413,11 +419,15 @@ public class HomePage extends JFrame implements ActionListener {
             dispose();
             SwingUtilities.invokeLater(() -> new HomePage(query));
         }
+        if(actionEvent.getSource()==logOutButton){
+            dispose();
+            SwingUtilities.invokeLater(LoginPage::new);
+        }
 
 
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new HomePage("SELECT * FROM inventory"));
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() -> new HomePage("SELECT * FROM inventory"));
+//    }
 }

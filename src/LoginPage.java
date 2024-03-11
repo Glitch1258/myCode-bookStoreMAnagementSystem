@@ -84,14 +84,14 @@ public class LoginPage extends JFrame implements ActionListener {
                 while (resultSet.next()) {
                     System.out.println("login successful");
                     dispose();
-                    //new HomePage(); //not yet created
+                    SwingUtilities.invokeLater(() -> new HomePage("SELECT * FROM inventory"));
                     return;
 
                 }
                 JOptionPane.showMessageDialog(null, "Login failed!",
                         "Error", JOptionPane.ERROR_MESSAGE);
                 dispose();
-                new LoginPage();
+                SwingUtilities.invokeLater(LoginPage::new);
 
             } catch (SQLException exception) {
                 System.out.print("Could not log in: ");
@@ -106,9 +106,9 @@ public class LoginPage extends JFrame implements ActionListener {
     }
 
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(LoginPage::new);
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(LoginPage::new);
+//    }
 }
 
 

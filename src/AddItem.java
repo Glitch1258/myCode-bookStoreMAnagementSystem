@@ -325,7 +325,7 @@ public class AddItem extends JFrame implements ActionListener {
             }
         }
 
-        if(actionEvent.getSource()==goToHomePageButton){
+        if (actionEvent.getSource() == goToHomePageButton) {
             dispose();
             SwingUtilities.invokeLater(() -> new HomePage("SELECT * FROM inventory"));
         }
@@ -337,9 +337,9 @@ public class AddItem extends JFrame implements ActionListener {
         return text.matches("\\d*\\.?\\d*");
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(AddItem::new);
-    }
+    //public static void main(String[] args) {
+        //SwingUtilities.invokeLater(AddItem::new);
+    //}
 }
 
 
