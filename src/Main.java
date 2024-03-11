@@ -4,66 +4,68 @@ public class Main {
     public static void main(String[] args) {
         DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
 
-        String tableName = "store"; // Specify the name of the table you want to inspect
-
-
-        try (Connection connection = databaseHandler.getDatabaseConnection();
-             Statement statement = connection.createStatement()) {
-
-            ResultSet resultSet = statement.executeQuery("PRAGMA table_info(" + tableName + ")");
-
-            // Iterate over the result set to retrieve column names
-            while (resultSet.next()) {
-                String columnName = resultSet.getString("name");
-                System.out.println("Column Name: " + columnName);
-            }
-        } catch (SQLException e) {
-            System.err.println("Error: " + e.getMessage());
-        }
-//        float costPrice=0;
-//        float sellingPrice=0;
-//        float totalSpent=0;
+//        String tableName = "store"; // Specify the name of the table you want to inspect
 //
 //
-//        String insertQuery = "INSERT into store (moneySpent, moneyMade, netIncome) values (?, ?, ?)";
+//        try (Connection connection = databaseHandler.getDatabaseConnection();
+//             Statement statement = connection.createStatement()) {
 //
+//            ResultSet resultSet = statement.executeQuery("PRAGMA table_info(" + tableName + ")");
 //
-//        try (Connection conn = databaseHandler.getDatabaseConnection();
-//             Statement stmt = conn.createStatement();
-//             PreparedStatement preparedStatement = conn.prepareStatement(insertQuery)
-//             ) {
-//
-//            ResultSet rs = stmt.executeQuery("SELECT * FROM inventory");
-//
-//            while (rs.next()) {
-//                String id = rs.getString("id");
-//                int numberOfPages = rs.getInt("numberOfPages");
-//                String title = rs.getString("title");
-//                String authorName = rs.getString("authorName");
-//                costPrice = rs.getFloat("costPrice");
-//                sellingPrice = rs.getFloat("sellingPrice");
-//                String description = rs.getString("description");
-//                String genre = rs.getString("genre");
-//                totalSpent+=costPrice;
-//
-//                // Reading BLOB data from the coverPageIcon column
-//                byte[] coverPageIconBytes = rs.getBytes("coverPageIcon");
-//
-//                System.out.println("ID: " + id + ", NumberOfPages: " + numberOfPages +
-//                        ", Title: " + title + ", AuthorName: " + authorName +
-//                        ", CostPrice: " + costPrice + ", SellingPrice: " + sellingPrice +
-//                        ", Description: " + description + ", CoverPageIcon size: " + coverPageIconBytes.length+" genre"+genre);
+//            // Iterate over the result set to retrieve column names
+//            while (resultSet.next()) {
+//                String columnName = resultSet.getString("name");
+//                System.out.println("Column Name: " + columnName);
 //            }
-//
-//            preparedStatement.setDouble(1,totalSpent);
-//            preparedStatement.setDouble(2,0);
-//            preparedStatement.setDouble(3,-totalSpent);
-//            preparedStatement.executeUpdate();
-//
-//
 //        } catch (SQLException e) {
 //            System.err.println("Error: " + e.getMessage());
 //        }
+        float costPrice=0;
+        float sellingPrice=0;
+        float totalSpent=0;
+
+
+        String insertQuery = "INSERT into store (moneySpent, moneyMade, netIncome) values (?, ?, ?)";
+
+
+        try (Connection conn = databaseHandler.getDatabaseConnection();
+             Statement stmt = conn.createStatement();
+             PreparedStatement preparedStatement = conn.prepareStatement(insertQuery)
+             ) {
+
+            ResultSet rs = stmt.executeQuery("SELECT * FROM inventory");
+
+            while (rs.next()) {
+                String id = rs.getString("id");
+                int numberOfPages = rs.getInt("numberOfPages");
+                String title = rs.getString("title");
+                String authorName = rs.getString("authorName");
+                costPrice = rs.getFloat("costPrice");
+                sellingPrice = rs.getFloat("sellingPrice");
+                String description = rs.getString("description");
+                String genre = rs.getString("genre");
+                totalSpent+=costPrice;
+
+
+                // Reading BLOB data from the coverPageIcon column
+                byte[] coverPageIconBytes = rs.getBytes("coverPageIcon");
+
+                System.out.println("TotalSpent  "+(totalSpent)+"ID: " + id + ", NumberOfPages: " + numberOfPages +
+                        ", Title: " + title + ", AuthorName: " + authorName +
+                        ", CostPrice: " + costPrice + ", SellingPrice: " + sellingPrice +
+                        ", Description: " + description + ", CoverPageIcon size: " + coverPageIconBytes.length+" genre"+genre);
+            }
+
+            preparedStatement.setDouble(1,totalSpent);
+            preparedStatement.setDouble(2,0);
+            preparedStatement.setDouble(3,-totalSpent);
+            preparedStatement.executeUpdate();
+            System.out.println(totalSpent);
+
+
+        } catch (SQLException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
 
 
 

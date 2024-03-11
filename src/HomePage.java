@@ -37,6 +37,7 @@ public class HomePage extends JFrame implements ActionListener {
 //                System.out.print(resultSet.getDouble("netIncome"));
                 this.moneySpentValue = resultSet.getDouble("moneySpent");
                 this.moneyEarnedValue = resultSet.getDouble("moneyMade");
+                System.out.println("moneyMade : "+moneyEarnedValue+"Money Spent Vallue "+ moneySpentValue);
 
             }
 
@@ -204,7 +205,7 @@ public class HomePage extends JFrame implements ActionListener {
 
         // Create a JPanel to add to the left of the JScrollPane
         JPanel controlMenu = new JPanel();
-        controlMenu.setBackground(new Color(193, 215, 215)); // Just to visualize it better
+        controlMenu.setBackground(new Color(0, 204, 255)); // Just to visualize it better
         controlMenu.setPreferredSize(new Dimension(400, 800)); // Set size of the left panel
 
         //--------------------------------------------------------------------------------------------------
@@ -257,6 +258,7 @@ public class HomePage extends JFrame implements ActionListener {
         searchBarTextAreaLabel.setFont(new Font("Arial", Font.ITALIC, 20));
         searchBarTextArea.setLineWrap(true);
         searchBarTextArea.setEditable(true);
+        searchBarTextArea.setBorder( BorderFactory.createLineBorder(Color.BLACK));
         searchButton.setFocusable(false);
         searchButton.addActionListener(this);
 
@@ -310,10 +312,10 @@ public class HomePage extends JFrame implements ActionListener {
 
     // Method to generate random background color
     private Color getRandomColor() {
-        this.colourState %= 3;
+        this.colourState %= 2;
         if (this.colourState == 0) {
             this.colourState++;
-            return new Color(135, 245, 228);
+            return new Color(102, 230, 255);
 
 
         }
@@ -321,10 +323,10 @@ public class HomePage extends JFrame implements ActionListener {
             this.colourState++;
             return new Color(102, 255, 255);
         }
-        if (this.colourState == 2) {
-            this.colourState++;
-            return new Color(204, 255, 255);
-        }
+//        if (this.colourState == 2) {
+//            this.colourState++;
+//            return new Color(204, 255, 255);
+//        }
         return new Color(193, 215, 215);
     }
 
@@ -339,25 +341,40 @@ public class HomePage extends JFrame implements ActionListener {
             SwingUtilities.invokeLater(() -> new HomePage("SELECT * FROM inventory ORDER BY " + sortBy + " ASC"));
 
         }
-        if(actionEvent.getSource()==sellButton){
-            float costPrice;
-            float sellingPrice;
-            float profit;
-            try(Statement statement = this.databaseConnection.createStatement()){
-                ResultSet resultSet = statement.executeQuery("SELECT * FROM inventory WHERE id='"+sellByIdTextField.getText()+"'");
-                while (resultSet.next()) {
-                    costPrice = resultSet.getFloat("costPrice");
-                    sellingPrice = resultSet.getFloat("sellingPrice");
-                    profit = (sellingPrice - costPrice);
-                    System.out.println(sellingPrice - costPrice);
+        if (actionEvent.getSource() == sellButton) {
+            try (Statement statement = this.databaseConnection.createStatement()) {
+                // Get the costPrice and sellingPrice from the inventory table
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM inventory WHERE id='" + sellByIdTextField.getText() + "'");
+                if (resultSet.next()) {
+                    float costPrice = resultSet.getFloat("costPrice");
+                    float sellingPrice = resultSet.getFloat("sellingPrice");
+                    double profit = sellingPrice - costPrice;
+
+                    // Update the moneyMade column in the store table
+                    double currentMoneyMade = this.moneyEarnedValue + profit;
+                    String updateQuery = "UPDATE store SET moneyMade = ?";
+
+                    try (PreparedStatement updateStatement = databaseConnection.prepareStatement(updateQuery)) {
+                        updateStatement.setDouble(1, currentMoneyMade);
+                        int rowsAffected = updateStatement.executeUpdate();
+                        if (rowsAffected > 0) {
+                            System.out.println("MoneyMade updated successfully.");
+                        } else {
+                            System.out.println("No records updated.");
+                        }
+                    } catch (SQLException e) {
+                        System.err.println("Error updating moneyMade: " + e.getMessage());
+                    }
+                } else {
+                    System.out.println("No inventory found with the specified ID.");
                 }
-                // update store table hear.
-
-
-            }catch (SQLException sqlException){
+            } catch (SQLException sqlException) {
                 System.err.println("Error: " + sqlException.getMessage());
             }
+            dispose();
+            SwingUtilities.invokeLater(() -> new HomePage("SELECT * FROM inventory"));
         }
+
 
 
     }

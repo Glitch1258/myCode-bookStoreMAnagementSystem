@@ -10,6 +10,7 @@ import java.sql.*;
 import java.util.UUID;
 
 public class AddItem extends JFrame implements ActionListener {
+    Double moneySpent;
     DatabaseHandler databaseHandler = new DatabaseHandler("bookStore");
     Connection databaseConnection = databaseHandler.getDatabaseConnection();
 
@@ -250,6 +251,32 @@ public class AddItem extends JFrame implements ActionListener {
                 preparedStatement.setBytes(9, imageData);
 
                 preparedStatement.executeUpdate();
+
+                //-----------------------------------------------------------
+
+
+                Statement statement = databaseConnection.createStatement();
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM store");
+                while (resultSet.next()) {
+                    this.moneySpent = resultSet.getDouble("moneySpent");
+
+                }
+
+                String updateQuery = "UPDATE store SET moneySpent = ?";
+                PreparedStatement updateStatement = databaseConnection.prepareStatement(updateQuery);
+                this.moneySpent += Double.parseDouble(costPrice);// update money Spent
+                updateStatement.setDouble(1, this.moneySpent);
+                int rowsAffected = updateStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("MoneyMade updated successfully.");
+                } else {
+                    System.out.println("No records updated.");
+                }
+
+
+                //========================================================
+
+                // add to money Spent hear
                 System.out.println("data inserted from GUI .");
             } catch (SQLException e) {
                 System.err.println("Error: " + e.getMessage());
