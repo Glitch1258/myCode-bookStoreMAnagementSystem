@@ -344,7 +344,8 @@ public class HomePage extends JFrame implements ActionListener {
         if (actionEvent.getSource() == sellButton) {
             try (Statement statement = this.databaseConnection.createStatement()) {
                 // Get the costPrice and sellingPrice from the inventory table
-                ResultSet resultSet = statement.executeQuery("SELECT * FROM inventory WHERE id='" + sellByIdTextField.getText() + "'");
+                String targetID = sellByIdTextField.getText();
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM inventory WHERE id='" + targetID + "'");
                 if (resultSet.next()) {
                     float costPrice = resultSet.getFloat("costPrice");
                     float sellingPrice = resultSet.getFloat("sellingPrice");
@@ -368,11 +369,22 @@ public class HomePage extends JFrame implements ActionListener {
                 } else {
                     System.out.println("No inventory found with the specified ID.");
                 }
+
+                // demove  entry and dispose
+                int rowsAffected = statement.executeUpdate("DELETE FROM inventory WHERE id='" + targetID + "'");
+
+                // Check if any rows were affected by the deletion
+                if (rowsAffected > 0) {
+                    System.out.println("Item with ID " +targetID + " removed successfully.");
+                } else {
+                    System.out.println("No item found with ID " + targetID + ".");
+                }
+                dispose();
+                SwingUtilities.invokeLater(() -> new HomePage("SELECT * FROM inventory"));
             } catch (SQLException sqlException) {
                 System.err.println("Error: " + sqlException.getMessage());
             }
-            dispose();
-            SwingUtilities.invokeLater(() -> new HomePage("SELECT * FROM inventory"));
+
         }
 
 
