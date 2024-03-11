@@ -18,7 +18,7 @@ public class HomePage extends JFrame implements ActionListener {
     JTextField sellByIdTextField;
     JButton sortButton, searchButton, sellButton, addToInventoryButton;
     String[] sortByOptionsComboBoxOptionsArray = {"numberOfPages", "title", "genre", "authorName", "costPrice",
-            "sellingPrice"};
+            "sellingPrice", "id"};
     JLabel moneySpentLabel, moneyEarnedLabel, netIncomeLabel, sortByComboBoxLabel, searchBarTextAreaLabel, sellByIdLabel;
     double moneySpentValue, moneyEarnedValue;
 
@@ -37,7 +37,7 @@ public class HomePage extends JFrame implements ActionListener {
 //                System.out.print(resultSet.getDouble("netIncome"));
                 this.moneySpentValue = resultSet.getDouble("moneySpent");
                 this.moneyEarnedValue = resultSet.getDouble("moneyMade");
-                System.out.println("moneyMade : "+moneyEarnedValue+"Money Spent Vallue "+ moneySpentValue);
+                System.out.println("moneyMade : " + moneyEarnedValue + "Money Spent Vallue " + moneySpentValue);
 
             }
 
@@ -224,12 +224,12 @@ public class HomePage extends JFrame implements ActionListener {
         sortByOptionsComboBox = new JComboBox<String>(sortByOptionsComboBoxOptionsArray);
         sortByOptionsComboBox.addActionListener(this);
 
-        sortByComboBoxLabel = new JLabel("sort by :");
-        sortByComboBoxLabel.setBounds(0, 75, 100, 25);
-        sortByOptionsComboBox.setBounds(50, 75, 150, 25);
+        sortByComboBoxLabel = new JLabel("sort or search by :");
+        sortByComboBoxLabel.setBounds(0, 75, 150, 25);
+        sortByOptionsComboBox.setBounds(125, 75, 150, 25);
 
         sortButton = new JButton("sort");
-        sortButton.setBounds(205, 75, 100, 25);
+        sortButton.setBounds(200, 225, 100, 25);
         sortButton.setFocusable(false);
         sortButton.addActionListener(this);
 
@@ -246,19 +246,19 @@ public class HomePage extends JFrame implements ActionListener {
 
 
         searchBarTextArea = new JTextArea();
-        searchBarTextAreaLabel = new JLabel("search");
+        searchBarTextAreaLabel = new JLabel("search text :");
         searchButton = new JButton("search");
 
 
         searchBarTextAreaLabel.setBounds(170, 150, 100, 25);
         searchBarTextArea.setBounds(50, 175, 300, 40);
-        searchButton.setBounds(150, 225, 100, 25);
+        searchButton.setBounds(100, 225, 100, 25);
 
 
-        searchBarTextAreaLabel.setFont(new Font("Arial", Font.ITALIC, 20));
+        //searchBarTextAreaLabel.setFont(new Font("Arial", Font.ITALIC, 20));
         searchBarTextArea.setLineWrap(true);
         searchBarTextArea.setEditable(true);
-        searchBarTextArea.setBorder( BorderFactory.createLineBorder(Color.BLACK));
+        searchBarTextArea.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         searchButton.setFocusable(false);
         searchButton.addActionListener(this);
 
@@ -331,11 +331,11 @@ public class HomePage extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent actionEvent) {
-        if(actionEvent.getSource()==addToInventoryButton){
+        if (actionEvent.getSource() == addToInventoryButton) {
             dispose();
             SwingUtilities.invokeLater(AddItem::new);
         }
-        if(actionEvent.getSource()==sortButton){
+        if (actionEvent.getSource() == sortButton) {
             String sortBy = (String) sortByOptionsComboBox.getSelectedItem();
             dispose();
             SwingUtilities.invokeLater(() -> new HomePage("SELECT * FROM inventory ORDER BY " + sortBy + " ASC"));
@@ -375,7 +375,7 @@ public class HomePage extends JFrame implements ActionListener {
 
                 // Check if any rows were affected by the deletion
                 if (rowsAffected > 0) {
-                    System.out.println("Item with ID " +targetID + " removed successfully.");
+                    System.out.println("Item with ID " + targetID + " removed successfully.");
                 } else {
                     System.out.println("No item found with ID " + targetID + ".");
                 }
@@ -387,6 +387,32 @@ public class HomePage extends JFrame implements ActionListener {
 
         }
 
+        if (actionEvent.getSource() == searchButton) {
+            System.out.println("searchAction");
+            String originalString = searchBarTextArea.getText();
+            int start = 0;
+            int end = start + 2;
+            int originalStringLength = originalString.length();
+            int numberofSubStrings = originalStringLength / 3;
+            String[] subStrings = new String[numberofSubStrings];
+            for (int i = 0; i < numberofSubStrings - 1; i++) {
+                subStrings[i] = originalString.substring(start, start + 3);
+                // System.out.println(i);
+                //System.out.println(subStrings[i]+"  "+start+"====="+(start+3));
+                start = start + 3;
+            }
+            subStrings[numberofSubStrings - 1] = originalString.substring(start, originalStringLength);
+            String searchString = "%";
+            for (int i = 0; i < numberofSubStrings; i++) {
+                System.out.println(subStrings[i]);
+                searchString += subStrings[i];
+                searchString += "%";
+            }
+            System.out.println(searchString);
+            String query = "SELECT * FROM inventory WHERE " + (String) sortByOptionsComboBox.getSelectedItem() + " LIKE '%" + searchString + "%' COLLATE NOCASE";
+            dispose();
+            SwingUtilities.invokeLater(() -> new HomePage(query));
+        }
 
 
     }
