@@ -62,6 +62,41 @@ public class LoginPage extends JFrame implements ActionListener {
         // addToInventoryButton.setIcon(new ImageIcon("F:\\projects\\"));
         container.add(logInButton);
 
+        //------------------------------------------------------------------------------------------
+
+        JLabel label1 = new JLabel("allowed userName 1 :");
+        label1.setBounds(620, 180, 200, 30);
+        container.add(label1);
+
+        JLabel label2 = new JLabel("sakib");
+        label2.setBounds(620, 215, 200, 30);
+        container.add(label2);
+
+        JLabel label3 = new JLabel("allowed password 1");
+        label3.setBounds(620, 250, 200, 30);
+        container.add(label3);
+
+        JLabel label4 = new JLabel("12345");
+        label4.setBounds(620, 285, 200, 30);
+        container.add(label4);
+
+        JLabel label5 = new JLabel("allowed user name 2");
+        label5.setBounds(850, 180, 200, 30);
+        container.add(label5);
+
+        JLabel label6 = new JLabel("sakib2");
+        label6.setBounds(850, 215, 200, 30);
+        container.add(label6);
+
+        JLabel label7 = new JLabel("allowed Password 2");
+        label7.setBounds(850, 250, 200, 30);
+        container.add(label7);
+
+        JLabel label8 = new JLabel("123456");
+        label8.setBounds(850, 285, 200, 30);
+        container.add(label8);
+        //------------------------------------------------------------------------------------------
+
 
         setSize(1000, 400);
         setLocation(250, 100);

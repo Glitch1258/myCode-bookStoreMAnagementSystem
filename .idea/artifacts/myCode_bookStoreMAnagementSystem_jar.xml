@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="myCode-bookStoreMAnagementSystem:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/myCode_bookStoreMAnagementSystem_jar</output-path>
+    <root id="archive" name="myCode-bookStoreMAnagementSystem.jar">
+      <element id="module-output" name="myCode-bookStoreMAnagementSystem" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../sqlite-jdbc-3.7.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../(maven)mysql-connector-java-8.0.27.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
