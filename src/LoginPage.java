@@ -94,7 +94,7 @@ public class LoginPage extends JFrame implements ActionListener {
 
         JLabel label8 = new JLabel("123456");
         label8.setBounds(850, 285, 200, 30);
-        container.add(label8);
+        container.add(label8);// labels in case  i forget username and password
         //------------------------------------------------------------------------------------------
 
 
